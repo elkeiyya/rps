@@ -1,49 +1,37 @@
-const userChoiceDisplay = document.createElement("h1");
-const computerChoiceDisplay = document.createElement("h1");
-const resultDisplay = document.createElement("h1");
-const gameGrid = document.getElementById("game");
-gameGrid.append(userChoiceDisplay, computerChoiceDisplay, resultDisplay);
-
+const resultDisplay = document.querySelector("#result");
+const choicesDisplay = document.querySelector("#choices");
 const choices = ["rock", "paper", "scissors"];
-let userChoice, computerChoice;
 
 const handleClick = e => {
-  userChoice = e.target.id;
-  userChoiceDisplay.innerHTML = "User Choice: " + userChoice;
-  generateComputerChoice();
-  getResults();
+  getResults(
+    e.target.innerHTML,
+    choices[Math.floor(Math.random() * choices.length)]
+  );
 };
 
-const generateComputerChoice = () => {
-  const randomChoice = choices[Math.floor(Math.random() * choices.length)];
-  computerChoice = randomChoice;
-  computerChoiceDisplay.innerHTML = "Computer Choice: " + computerChoice;
-};
-
-for (let i = 0; i < choices.length; i++) {
+choices.forEach(choice => {
   const button = document.createElement("button");
-  button.id = choices[i];
-  button.innerHTML = choices[i];
+  button.innerHTML = choice;
   button.addEventListener("click", handleClick);
-  gameGrid.appendChild(button);
-}
+  choicesDisplay.appendChild(button);
+});
 
-const getResults = () => {
+const getResults = (userChoice, computerChoice) => {
   switch (userChoice + computerChoice) {
     case "scissorspaper":
     case "rockscissors":
     case "paperrock":
-      resultDisplay.innerHTML = "YOU WIN";
+      resultDisplay.innerHTML = `You chose ${userChoice} and the computer chose ${computerChoice}. YOU WIN!`;
       break;
     case "paperscissors":
     case "scissorsrock":
     case "rockpaper":
-      resultDisplay.innerHTML = "YOU LOSE";
+      resultDisplay.innerHTML = `You chose ${userChoice} and the computer chose ${computerChoice}. YOU LOSE!`;
       break;
     case "scissorsscissors":
     case "rockrock":
     case "paperpaper":
-      resultDisplay.innerHTML = "IT'S A DRAW";
+      resultDisplay.innerHTML = `You chose ${userChoice} and the computer chose ${computerChoice}. IT'S A DRAW!`;
       break;
   }
 };
