@@ -1,56 +1,49 @@
-const computerChoiceDisplay = document.getElementById("computer-choice");
-const userChoiceDisplay = document.getElementById("user-choice");
-const resultDisplay = document.getElementById("results");
-const possibleChoices = document.querySelectorAll("button");
+const userChoiceDisplay = document.createElement("h1");
+const computerChoiceDisplay = document.createElement("h1");
+const resultDisplay = document.createElement("h1");
+const gameGrid = document.getElementById("game");
+gameGrid.append(userChoiceDisplay, computerChoiceDisplay, resultDisplay);
 
-let userChoice, computerChoice, result;
+const choices = ["rock", "paper", "scissors"];
+let userChoice, computerChoice;
 
-possibleChoices.forEach(possibleChoice =>
-  possibleChoice.addEventListener("click", e => {
-    userChoice = e.target.id;
-    userChoiceDisplay.innerHTML = userChoice;
-    generateComputerChoice();
-    getResult();
-  })
-);
+const handleClick = e => {
+  userChoice = e.target.id;
+  userChoiceDisplay.innerHTML = "User Choice: " + userChoice;
+  generateComputerChoice();
+  getResults();
+};
 
-function generateComputerChoice() {
-  const randomNumber = Math.floor(Math.random() * 3) + 1; //or you can use possibleChoices.length
+const generateComputerChoice = () => {
+  const randomChoice = choices[Math.floor(Math.random() * choices.length)];
+  computerChoice = randomChoice;
+  computerChoiceDisplay.innerHTML = "Computer Choice: " + computerChoice;
+};
 
-  if (randomNumber === 1) {
-    computerChoice = "rock";
-  }
-  if (randomNumber === 2) {
-    computerChoice = "paper";
-  }
-  if (randomNumber === 3) {
-    computerChoice = "scissors";
-  }
-
-  computerChoiceDisplay.innerHTML = computerChoice;
+for (let i = 0; i < choices.length; i++) {
+  const button = document.createElement("button");
+  button.id = choices[i];
+  button.innerHTML = choices[i];
+  button.addEventListener("click", handleClick);
+  gameGrid.appendChild(button);
 }
 
-function getResult() {
-  if (computerChoice === userChoice) {
-    result = "It's a draw";
+const getResults = () => {
+  switch (userChoice + computerChoice) {
+    case "scissorspaper":
+    case "rockscissors":
+    case "paperrock":
+      resultDisplay.innerHTML = "YOU WIN";
+      break;
+    case "paperscissors":
+    case "scissorsrock":
+    case "rockpaper":
+      resultDisplay.innerHTML = "YOU LOSE";
+      break;
+    case "scissorsscissors":
+    case "rockrock":
+    case "paperpaper":
+      resultDisplay.innerHTML = "IT'S A DRAW";
+      break;
   }
-  if (computerChoice === "rock" && userChoice === "paper") {
-    result = "You win!";
-  }
-  if (computerChoice === "rock" && userChoice === "scissors") {
-    result = "You lose!";
-  }
-  if (computerChoice === "paper" && userChoice === "scissors") {
-    result = "You win!";
-  }
-  if (computerChoice === "paper" && userChoice === "rock") {
-    result = "You lose!";
-  }
-  if (computerChoice === "scissors" && userChoice === "paper") {
-    result = "You lose!";
-  }
-  if (computerChoice === "scissors" && userChoice === "rock") {
-    result = "You win!";
-  }
-  resultDisplay.innerHTML = result;
-}
+};
